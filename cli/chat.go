@@ -29,8 +29,11 @@ func (a *App) initChatView() {
 			if key == tcell.KeyEnter {
 				message := inputField.GetText()
 				if message != "" {
+					msg := Msg{MsgValue: message, MsgType: MsgTypeText, ReceiverID: a.currentChat.userId, SenderID: a.authInfo.currentUser.ID}
+					a.mu.Lock()
+					a.currentChat.Messages = append(a.currentChat.Messages, msg)
 					a.addMessage("You", message, "blue", time.Now().Format(time.DateTime))
-					msg := Msg{MsgValue: message, MsgType: MsgTypeText, ReceiverID: a.currentChat.userId}
+					a.mu.Unlock()
 					a.outgoingMsgs <- msg
 					inputField.SetText("")
 				}
@@ -88,7 +91,6 @@ func (a *App) showChatView() {
 	}
 
 	a.chatView.SetTitle("Chat with " + a.currentChat.username)
-	a.chatView.GetItem(0).(*tview.TextView).SetText("")
 
 	a.mu.Lock()
 	a.currentChat.Messages = msgResp.Messages
@@ -97,6 +99,7 @@ func (a *App) showChatView() {
 }
 
 func (a *App) updateChatView() {
+	a.chatView.GetItem(0).(*tview.TextView).SetText("")
 	for _, msg := range a.currentChat.Messages {
 		if a.authInfo.currentUser.ID == msg.SenderID {
 			a.addMessage("You", msg.MsgValue, "blue", msg.Timestamp.Format(time.DateTime))
