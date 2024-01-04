@@ -40,6 +40,11 @@ Ensure Docker is installed for a seamless experience.
 
 ---
 
+## Preview
+![image](https://github.com/devAdhiraj/go-dev-chat/assets/75645547/3e793e91-d78a-443d-99fd-89be80eb2e74)
+
+---
+
 For additional information and documentation, refer to the respective libraries and frameworks used:
 
 - [tview](https://pkg.go.dev/github.com/rivo/tview#section-readme)
